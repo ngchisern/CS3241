@@ -132,8 +132,8 @@ void DrawOneCar( float bodyColor[3] )
     // Draw the car body.
     //****************************
     // tyre radius
-    GLfloat innerRadius = CAR_LENGTH / 8;
-    GLfloat outerRadius = CAR_LENGTH / 4;
+    GLfloat innerRadius = CAR_LENGTH / 16;
+    GLfloat outerRadius = CAR_LENGTH / 8;
 
     GLfloat scaledHeight = CAR_HEIGHT / CAR_LENGTH;
     GLfloat scaledWidth = CAR_WIDTH / CAR_LENGTH;
@@ -160,21 +160,25 @@ void DrawOneCar( float bodyColor[3] )
 
     glPushMatrix();
         glTranslatef(xDistance,yDistance, zDistance);
+        glRotatef(90, 1.0, 0, 0);
         glutSolidTorus(innerRadius,outerRadius,sides,rings);
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(xDistance,-yDistance, zDistance);
+        glRotatef(90, 1.0, 0, 0);
         glutSolidTorus(innerRadius,outerRadius,sides,rings);
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(-xDistance,yDistance, zDistance);
+        glRotatef(90, 1.0, 0, 0);
         glutSolidTorus(innerRadius,outerRadius,sides,rings);
     glPopMatrix();
 
     glPushMatrix();
         glTranslatef(-xDistance,-yDistance, zDistance);
+        glRotatef(90, 1.0, 0, 0);
         glutSolidTorus(innerRadius,outerRadius,sides,rings);
     glPopMatrix();
 
@@ -195,10 +199,10 @@ void DrawAllCars( void )
         //****************************
         CarType* c = &car[i];
         glPushMatrix();
-            glRotatef((GLfloat) c->rotAngle, (GLfloat) c->xzAxis[0], 0, (GLfloat) c->xzAxis[1]);
+            //glRotatef((GLfloat) c->rotAngle, (GLfloat) c->xzAxis[0], 0, (GLfloat) c->xzAxis[1]);
             glTranslatef(0, 0, PLANET_RADIUS);
-            glRotatef(c->angularPos, 0, 1, 0);
-            glRotatef(270, 1, 0, 0);
+//            glRotatef(c->angularPos, 0, 1, 0);
+//            glRotatef(270, 1, 0, 0);
             DrawOneCar(c->bodyColor);
         glPopMatrix();
     }
