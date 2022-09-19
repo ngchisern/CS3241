@@ -200,6 +200,7 @@ void DrawAllCars( void )
         CarType* c = &car[i];
         glPushMatrix();
             glRotatef((GLfloat) c->rotAngle, (GLfloat) c->xzAxis[0], 0, (GLfloat) c->xzAxis[1]);
+            glRotatef(c->angularPos, 0, 0, 1);
             glTranslatef(0, PLANET_RADIUS, 0);
             glRotatef(270, 1, 0, 0);
             DrawOneCar(c->bodyColor);
@@ -354,7 +355,9 @@ void MyTimer( int v )
         //****************************
         // WRITE YOUR CODE HERE.
         //****************************
+        UpdateCars();
     }
+    glutTimerFunc(1 * 1000 / DESIRED_FPS, MyTimer, v);
 }
 
 
