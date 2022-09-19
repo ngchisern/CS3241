@@ -1,7 +1,7 @@
 //============================================================
-// STUDENT NAME:
-// NUS User ID.:
-// COMMENTS TO GRADER:
+// STUDENT NAME: Ng Chi Sern
+// NUS User ID.: A0219866M
+// COMMENTS TO GRADER: TODO
 //
 // ============================================================
 
@@ -131,6 +131,18 @@ void DrawOneCar( float bodyColor[3] )
     //
     // Draw the car body.
     //****************************
+    // tyre radius
+    GLfloat innerRadius = CAR_LENGTH / 8;
+    GLfloat outerRadius = CAR_LENGTH / 4;
+
+    GLfloat scaledHeight = CAR_HEIGHT / CAR_LENGTH;
+    GLfloat scaledWidth = CAR_WIDTH / CAR_LENGTH;
+
+    glPushMatrix();
+        glScalef(1.0, scaledWidth, scaledHeight);
+        glTranslatef(0, 0, (GLfloat) outerRadius);
+        glutSolidCube(CAR_LENGTH);
+    glPopMatrix();
 
     glColor3fv(tyreColor);
 
@@ -139,6 +151,33 @@ void DrawOneCar( float bodyColor[3] )
     //
     // Draw the four tyres.
     //****************************
+    GLint sides = 10;
+    GLint rings = 20;
+
+    GLfloat xDistance = CAR_LENGTH  / 4;
+    GLfloat yDistance = ((GLfloat) CAR_WIDTH + innerRadius) / 2;
+    GLfloat zDistance = outerRadius;
+
+    glPushMatrix();
+        glTranslatef(xDistance,yDistance, zDistance);
+        glutSolidTorus(innerRadius,outerRadius,sides,rings);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(xDistance,-yDistance, zDistance);
+        glutSolidTorus(innerRadius,outerRadius,sides,rings);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-xDistance,yDistance, zDistance);
+        glutSolidTorus(innerRadius,outerRadius,sides,rings);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-xDistance,-yDistance, zDistance);
+        glutSolidTorus(innerRadius,outerRadius,sides,rings);
+    glPopMatrix();
+
 }
 
 
