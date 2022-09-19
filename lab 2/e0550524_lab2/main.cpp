@@ -260,8 +260,8 @@ void MyDisplay( void )
     // the predefined constant CLIP_PLANE_DIST to position your near and
     // far planes.
     //***********************************************************************
-    gluPerspective( VERT_FOV, (double)winWidth / winHeight, 50.0, 600.0 );
-
+    gluPerspective( VERT_FOV, (double)winWidth / winHeight,
+                    eyeDistance - CLIP_PLANE_DIST, eyeDistance + CLIP_PLANE_DIST);
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
@@ -272,7 +272,11 @@ void MyDisplay( void )
     // Modify the following line of code to set up the view transformation.
     // You may use the gluLookAt() function, but you can use other method.
     //***********************************************************************
-    gluLookAt( 0.0, 0.0, eyeDistance, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 );
+    GLfloat eyeX = eyeDistance * sin(eyeLongitude * PI / 180) * cos(eyeLatitude * PI / 180);
+    GLfloat eyeY = eyeDistance * sin(eyeLatitude * PI / 180);
+    GLfloat eyeZ = eyeDistance * cos(eyeLongitude * PI / 180) * cos(eyeLatitude * PI / 180);
+
+    gluLookAt(eyeX, eyeY, eyeZ, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0 );
 
 
     // Set world positions of the two lights.
