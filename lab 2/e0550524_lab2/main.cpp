@@ -200,9 +200,8 @@ void DrawAllCars( void )
         CarType* c = &car[i];
         glPushMatrix();
             glRotatef((GLfloat) c->rotAngle, (GLfloat) c->xzAxis[0], 0, (GLfloat) c->xzAxis[1]);
-            glRotatef(c->angularPos, 0, 0, 1);
-            glTranslatef(0, PLANET_RADIUS, 0);
-            glRotatef(270, 1, 0, 0);
+            glRotatef(c->angularPos, 0, 1, 0);
+            glTranslatef(0, 0, PLANET_RADIUS);
             DrawOneCar(c->bodyColor);
         glPopMatrix();
     }
