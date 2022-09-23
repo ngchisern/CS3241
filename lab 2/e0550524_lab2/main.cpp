@@ -139,8 +139,14 @@ void DrawOneCar( float bodyColor[3] )
     GLfloat scaledWidth = CAR_WIDTH / CAR_LENGTH;
 
     glPushMatrix();
-        glScalef(1.0, scaledWidth, scaledHeight);
-        glTranslatef(0, 0, (GLfloat) outerRadius);
+        glScalef(1.0, scaledWidth, scaledHeight / 2);
+        glTranslatef(0, 0, CAR_LENGTH / 2 + (innerRadius + outerRadius) / scaledHeight);
+        glutSolidCube(CAR_LENGTH);
+    glPopMatrix();
+
+    glPushMatrix();
+        glScalef(1.0 / 2, scaledWidth, scaledHeight / 2);
+        glTranslatef(0, 0, 3 * CAR_LENGTH / 2 + (innerRadius + outerRadius) / scaledHeight);
         glutSolidCube(CAR_LENGTH);
     glPopMatrix();
 
@@ -155,7 +161,7 @@ void DrawOneCar( float bodyColor[3] )
     GLint rings = 20;
 
     GLfloat xDistance = CAR_LENGTH  / 4;
-    GLfloat yDistance = ((GLfloat) CAR_WIDTH + innerRadius) / 2;
+    GLfloat yDistance = CAR_WIDTH / 2 + innerRadius;
     GLfloat zDistance = outerRadius;
 
     glPushMatrix();
