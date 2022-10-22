@@ -171,12 +171,12 @@ void MakeReflectionImage( void )
     double virEyePos[3];
     virEyePos[0] = eyePos[0];
     virEyePos[1] = eyePos[1];
-    virEyePos[2] = 2 * TABLETOP_Z -  eyePos[2];
+    virEyePos[2] = 2 * TABLETOP_Z - eyePos[2];
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(TABLETOP_Y1 - virEyePos[1], TABLETOP_Y2 - virEyePos[1], TABLETOP_X1 - virEyePos[0], TABLETOP_X1 - virEyePos[0],
-              TABLETOP_Z - virEyePos[2], TABLETOP_Z + virEyePos[2] + SCENE_RADIUS);
+    glFrustum(TABLETOP_Y1 - virEyePos[1], TABLETOP_Y2 - virEyePos[1], TABLETOP_X1 - virEyePos[0], TABLETOP_X2 - virEyePos[0],
+              TABLETOP_Z - virEyePos[2], TABLETOP_Z - virEyePos[2] + SCENE_RADIUS);
 
     // STEP 3
     glMatrixMode(GL_MODELVIEW);
