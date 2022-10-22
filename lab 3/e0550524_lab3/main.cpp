@@ -192,7 +192,6 @@ void MakeReflectionImage( void )
     DrawRoom();
     DrawTeapot();
     DrawSphere();
-    DrawTable();
 
     // STEP 6
     glReadBuffer(GL_BACK);
