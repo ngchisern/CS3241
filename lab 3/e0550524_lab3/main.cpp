@@ -145,10 +145,21 @@ void MakeReflectionImage( void )
     //********************************************************
     // This function does the followings:
     // STEP 1: Clears the correct buffers.
+    // clear color and depth buffers
+
     // STEP 2: Sets up the correct view volume for the imaginary viewpoint.
+    // change the matrix stack ... with
+    // set the matrix stack to GL_PROJECTION
+    // ensure that matrix stack is now the entity
+
     // STEP 3: Sets up the imaginary viewpoint.
+
+
     // STEP 4: Sets up the light source positions in the world space.
+
     // STEP 5: Draws the scene (may not need to draw all objects).
+    // check display callback
+
     // STEP 6: Read the correct color buffer into the correct texture object.
     //********************************************************
 
@@ -528,6 +539,8 @@ void SetUpTextureMaps( void )
     //****************************
     // WRITE YOUR CODE HERE.
     //****************************
+
+    // copy pasting
 
 
 }
