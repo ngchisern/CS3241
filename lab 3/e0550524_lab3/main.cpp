@@ -957,9 +957,9 @@ void DrawTable( void )
     glBindTexture( GL_TEXTURE_2D, reflectionTexObj );
     glNormal3f( 0.0, 0.0, 1.0 ); // Normal vector.
     SubdivideAndDrawQuad( 24, 24, 0.0, 0.0, TABLETOP_X1, TABLETOP_Y1, TABLETOP_Z,
-                          1.0, 0.0, TABLETOP_X1, TABLETOP_Y2, TABLETOP_Z,
+                          0.0, 1.0, TABLETOP_X2, TABLETOP_Y1, TABLETOP_Z,
                           1.0, 1.0, TABLETOP_X2, TABLETOP_Y2, TABLETOP_Z,
-                          0.0, 1.0, TABLETOP_X2, TABLETOP_Y1, TABLETOP_Z);
+                          1.0, 0.0, TABLETOP_X1, TABLETOP_Y2, TABLETOP_Z);
 
 // Sides.
 
