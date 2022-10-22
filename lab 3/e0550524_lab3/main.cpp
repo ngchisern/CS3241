@@ -148,12 +148,10 @@ void MakeReflectionImage( void )
     // clear color and depth buffers
 
     // STEP 2: Sets up the correct view volume for the imaginary viewpoint.
-    // change the matrix stack ... with
     // set the matrix stack to GL_PROJECTION
     // ensure that matrix stack is now the entity
 
     // STEP 3: Sets up the imaginary viewpoint.
-
 
     // STEP 4: Sets up the light source positions in the world space.
 
@@ -166,8 +164,42 @@ void MakeReflectionImage( void )
     //****************************
     // WRITE YOUR CODE HERE.
     //****************************
+    // STEP 1
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
+    // STEP 2
+    double virEyePos[3];
+    virEyePos[0] = eyePos[0];
+    virEyePos[1] = eyePos[1];
+    virEyePos[2] = 2 * TABLETOP_Z -  eyePos[2];
 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(TABLETOP_Y1 - virEyePos[1], TABLETOP_Y2 - virEyePos[1], TABLETOP_X1 - virEyePos[0], TABLETOP_X1 - virEyePos[0],
+              TABLETOP_Z - virEyePos[2], TABLETOP_Z + virEyePos[2] + SCENE_RADIUS);
+
+    // STEP 3
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    gluLookAt(virEyePos[0], virEyePos[1], virEyePos[2], eyePos[0], eyePos[1], eyePos[2],
+              1, 0, 0);
+
+    // STEP 4
+    glLightfv( GL_LIGHT0, GL_POSITION, light0Position );
+    glLightfv( GL_LIGHT1, GL_POSITION, light1Position );
+
+    // STEP 5
+    DrawRoom();
+    DrawTeapot();
+    DrawSphere();
+    DrawTable();
+
+    // STEP 6
+    glReadBuffer(GL_BACK);
+    glBindTexture(GL_TEXTURE_2D, reflectionTexObj);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, winWidth, winHeight, 0);
 }
 
 
