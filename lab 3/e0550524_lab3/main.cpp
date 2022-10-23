@@ -126,7 +126,7 @@ void DrawRoom( void );
 void DrawTeapot( void );
 void DrawSphere( void );
 void DrawTable( void );
-
+void DrawRocket(void );
 
 
 
@@ -192,6 +192,7 @@ void MakeReflectionImage( void )
     DrawRoom();
     DrawTeapot();
     DrawSphere();
+    DrawRocket();
 
     // STEP 6
     glReadBuffer(GL_BACK);
@@ -245,6 +246,7 @@ void MyDisplay( void )
     DrawTeapot();
     DrawSphere();
     DrawTable();
+    DrawRocket();
 
     glutSwapBuffers();
 }
@@ -1045,4 +1047,134 @@ void DrawTable( void )
     glTranslated( 0.0, 0.0, 0.5 );
     glutSolidCube( 1.0 );
     glPopMatrix();
+}
+
+double* calculateNormal(double x1, double y1,
+                        double z1, double x2,
+                        double y2, double z2,
+                        double x3, double y3, double z3)
+{
+    double result[3];
+    double a1 = x2 - x1;
+    double b1 = y2 - y1;
+    double c1 = z2 - z1;
+    double a2 = x3 - x1;
+    double b2 = y3 - y1;
+    double c2 = z3 - z1;
+    result[0] = b1 * c2 - b2 * c1;
+    result[1] = a2 * c1 - a1 * c2;
+    result[2] = a1 * b2 - b1 * a2;
+
+    double magnitude = sqrt(result[0] * result[0] + result[1] * result[1] + result[2] * result[2]);
+    result[0] /= magnitude;
+    result[1] /= magnitude;
+    result[2] /= magnitude;
+
+    return result;
+}
+
+double ROCKET_Z = TABLETOP_Z + 0.3;
+double ROCKET_X = TABLETOP_X1 + 3 * (TABLETOP_X2 - TABLETOP_X1) / 4;
+double ROCKET_Y = TABLETOP_Y1 + (TABLETOP_Y2 - TABLETOP_Y1) / 4;
+
+double ROCKET_RADIUS = 0.1;
+double ROCKET_HEIGHT = 0.5;
+double BODY_HEIGHT = 0.7 * ROCKET_HEIGHT;
+double CONE_HEIGHT = ROCKET_HEIGHT - BODY_HEIGHT;
+
+double FIN_HEIGHT = 0.3;
+
+/////////////////////////////////////////////////////////////////////////////
+// Draw Rocket
+/////////////////////////////////////////////////////////////////////////////
+void DrawRocket(void )
+{
+    GLfloat matAmbient1[] = { 0.5, 0.7, 1.0, 1.0 };
+    GLfloat matDiffuse1[] = { 0.5, 0.7, 1.0, 1.0 };
+    GLfloat matSpecular1[] = { 0.8, 0.8, 0.8, 1.0 };
+    GLfloat matShininess1[] = { 128.0 };
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient1 );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse1 );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular1 );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess1 );
+
+    glBindTexture( GL_TEXTURE_2D, spotsTexObj );
+
+    int segment = 24;
+    // draw bottom
+    glNormal3f( 0.0, 0.0, -1.0); // Normal vector.
+    for (int i = 0; i < segment; i++) {
+        double x0 = ROCKET_RADIUS * cos(2 * PI * (i + 1) / segment);
+        double y0 = ROCKET_RADIUS * sin(2 * PI * (i + 1) / segment);
+        double x1 = ROCKET_RADIUS * cos(2 * PI * i / segment);
+        double y1 = ROCKET_RADIUS * sin(2 * PI * i / segment);
+
+        SubdivideAndDrawQuad(24, 24, 0.0, 0.0, ROCKET_X, ROCKET_Y, ROCKET_Z,
+                             0.0, 1.0, ROCKET_X, ROCKET_Y, ROCKET_Z,
+                             1.0, 1.0, ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z,
+                             1.0, 0.0, ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z);
+    }
+
+    // draw body
+    for (int i = 0; i < segment; i++) {
+        double x0 = ROCKET_RADIUS * cos(2 * PI * i / segment);
+        double y0 = ROCKET_RADIUS * sin(2 * PI * i / segment);
+        double x1 = ROCKET_RADIUS * cos(2 * PI * (i + 1) / segment);
+        double y1 = ROCKET_RADIUS * sin(2 * PI * (i + 1) / segment);
+
+        double* normalV = calculateNormal(ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z,
+                                          ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z,
+                                          ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z + BODY_HEIGHT);
+        glNormal3f(normalV[0], normalV[1], normalV[2]); // Normal vector.
+
+        SubdivideAndDrawQuad(24, 24, 0.0, 0.0,  ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z,
+                             0.0, 1.0, ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z,
+                             1.0, 1.0, ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z + BODY_HEIGHT,
+                             1.0, 0.0, ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z + BODY_HEIGHT);
+    }
+
+    // draw cone
+    for (int i = 0; i < segment; i++) {
+        double x0 = ROCKET_RADIUS * cos(2 * PI * i / segment);
+        double y0 = ROCKET_RADIUS * sin(2 * PI * i / segment);
+        double x1 = ROCKET_RADIUS * cos(2 * PI * (i + 1) / segment);
+        double y1 = ROCKET_RADIUS * sin(2 * PI * (i + 1) / segment);
+
+        double* normalV = calculateNormal(ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
+                                          ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
+                                          ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT);
+        glNormal3f(normalV[0], normalV[1], normalV[2]); // Normal vector.
+
+        SubdivideAndDrawQuad(24, 24, 0.0, 0.0,  ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
+                             0.0, 1.0, ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
+                             1.0, 1.0, ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT,
+                             1.0, 0.0, ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT);
+    }
+
+    // draw fins
+    glBindTexture( GL_TEXTURE_2D, woodTexObj );
+    for (int i = 0; i < 4; i++) {
+        double x = ROCKET_RADIUS * cos(2 * PI * i / 4);
+        double y = ROCKET_RADIUS * sin(2 * PI * i / 4);
+
+        double* normalV = calculateNormal(ROCKET_X + x, ROCKET_Y + y, ROCKET_Z,
+                                          ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z - FIN_HEIGHT / 2,
+                                          ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z);
+        glNormal3f(normalV[0], normalV[1], normalV[2]); // Normal vector.
+
+        SubdivideAndDrawQuad(24, 24, 0.0, 0.0,  ROCKET_X + x, ROCKET_Y + y, ROCKET_Z,
+                             0.0, 1.0, ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z - FIN_HEIGHT / 2,
+                             1.0, 1.0, ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z,
+                             1.0, 0.0, ROCKET_X + x, ROCKET_Y + y, ROCKET_Z + FIN_HEIGHT / 2);
+
+        normalV = calculateNormal(ROCKET_X + x, ROCKET_Y + y, ROCKET_Z,
+                                          ROCKET_X + x, ROCKET_Y + y, ROCKET_Z + FIN_HEIGHT / 2,
+                                          ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z);
+        glNormal3f(normalV[0], normalV[1], normalV[2]); // Normal vector.
+
+        SubdivideAndDrawQuad(24, 24, 0.0, 0.0,  ROCKET_X + x, ROCKET_Y + y, ROCKET_Z,
+                             1.0, 0.0, ROCKET_X + x, ROCKET_Y + y, ROCKET_Z + FIN_HEIGHT / 2,
+                             1.0, 1.0, ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z,
+                             0.0, 1.0, ROCKET_X + x * 2.0, ROCKET_Y + y * 2.0, ROCKET_Z - FIN_HEIGHT / 2);
+    }
 }
