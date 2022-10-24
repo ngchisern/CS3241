@@ -1141,8 +1141,8 @@ void DrawRocket(void )
         double y1 = ROCKET_RADIUS * sin(2 * PI * (i + 1) / segment);
 
         double* normalV = calculateNormal(ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
-                                          ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
-                                          ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT);
+                                          ROCKET_X + x0, ROCKET_Y + y0, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT,
+                                          ROCKET_X + x1, ROCKET_Y + y1, ROCKET_Z + ROCKET_HEIGHT - CONE_HEIGHT);
         glNormal3f(normalV[0], normalV[1], normalV[2]); // Normal vector.
 
         SubdivideAndDrawQuad(24, 24, 0.0, 0.0,  ROCKET_X, ROCKET_Y, ROCKET_Z + ROCKET_HEIGHT,
