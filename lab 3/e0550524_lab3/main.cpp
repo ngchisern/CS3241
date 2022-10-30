@@ -11,7 +11,6 @@
 #include "image_io.h"
 #include <vector>
 #include <array>
-#include <string>
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -1232,7 +1231,7 @@ bool loadOBJ(
     return true;
 }
 
-float ROCKET_Z = TABLETOP_Z + 0.3;
+float ROCKET_Z = TABLETOP_Z + 0.5;
 float ROCKET_X = TABLETOP_X1 + 3 * (TABLETOP_X2 - TABLETOP_X1) / 4;
 float ROCKET_Y = TABLETOP_Y1 + (TABLETOP_Y2 - TABLETOP_Y1) / 4;
 
@@ -1252,10 +1251,10 @@ void DrawUFO(void )
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess );
 
-    drawUFOComponent("objs/sphere.obj", earthTexObj);
-    drawUFOComponent("objs/rod.obj", metalTexObj);
-    drawUFOComponent("objs/flag.obj", anyaTexObj);
-    drawUFOComponent("objs/flag_back.obj", anyaTexObj);
+    drawUFOComponent("images/sphere.obj", earthTexObj);
+    drawUFOComponent("images/rod.obj", metalTexObj);
+    drawUFOComponent("images/flag.obj", anyaTexObj);
+    drawUFOComponent("images/flag_back.obj", anyaTexObj);
 
     GLfloat matAmbient1[] = { 0.6, 0.6, 0.6, 1.0 };
     GLfloat matDiffuse1[] = { 0.6, 0.6, 0.6, 1.0 };
@@ -1265,8 +1264,8 @@ void DrawUFO(void )
     glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess1 );
-    drawUFOComponent("objs/upper.obj", grassTexObj);
-    drawUFOComponent("objs/lower.obj", seaTexObj);
+    drawUFOComponent("images/upper.obj", grassTexObj);
+    drawUFOComponent("images/lower.obj", seaTexObj);
 }
 
 void drawUFOComponent(char * path, GLuint textObj) {
