@@ -10,6 +10,8 @@
 #include <math.h>
 #include "image_io.h"
 #include <vector>
+#include <array>
+#include <string>
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
@@ -1050,16 +1052,115 @@ void DrawTable( void )
     glPopMatrix();
 }
 
-double ROCKET_Z = TABLETOP_Z + 0.3;
-double ROCKET_X = TABLETOP_X1 + 3 * (TABLETOP_X2 - TABLETOP_X1) / 4;
-double ROCKET_Y = TABLETOP_Y1 + (TABLETOP_Y2 - TABLETOP_Y1) / 4;
+bool loadOBJ(
+        const char * path,
+        std::vector < std::array<float, 3> > & out_vertices,
+        std::vector < std::array<float, 2> > & out_uvs,
+        std::vector < std::array<float, 3> > & out_normals
+) {
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        printf("Impossible to open the file!\n");
+        return false;
+    }
 
-double ROCKET_RADIUS = 0.1;
-double ROCKET_HEIGHT = 0.5;
-double BODY_HEIGHT = 0.7 * ROCKET_HEIGHT;
-double CONE_HEIGHT = ROCKET_HEIGHT - BODY_HEIGHT;
+    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+    std::vector<std::array<float, 3> > temp_vertices;
+    std::vector<std::array<float, 2> > temp_uvs;
+    std::vector<std::array<float, 3> > temp_normals;
 
-double FIN_HEIGHT = 0.3;
+    while (true) {
+        char lineHeader[128];
+        // read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break;
+
+        if (strcmp(lineHeader, "v") == 0) {
+            std::array<float, 3> vertex;
+            fscanf(file, "%f %f %f\n", &vertex[0], &vertex[1], &vertex[2]);
+            temp_vertices.push_back(vertex);
+        } else if (strcmp(lineHeader, "vt") == 0) {
+            std::array<float, 2> uv;
+            fscanf(file, "%f %f\n", &uv[0], &uv[1]);
+            temp_uvs.push_back(uv);
+        } else if (strcmp(lineHeader, "vn") == 0) {
+            std::array<float, 3> normal;
+            fscanf(file, "%f %f %f\n", &normal[0], &normal[1], &normal[2]);
+            temp_normals.push_back(normal);
+        } else if (strcmp(lineHeader, "f") == 0) {
+            unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0],
+                                 &normalIndex[0],
+                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2],
+                                 &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
+            if (matches != 12) {
+                printf("File can't be read by this simple parser\n");
+                return false;
+            }
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            vertexIndices.push_back(vertexIndex[3]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
+            uvIndices.push_back(uvIndex[3]);
+            normalIndices.push_back(normalIndex[0]);
+            normalIndices.push_back(normalIndex[1]);
+            normalIndices.push_back(normalIndex[2]);
+            uvIndices.push_back(uvIndex[4]);
+        }
+    }
+
+    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+        unsigned int vertexIndex = vertexIndices[i];
+        std::array<float, 3> vertex = temp_vertices[vertexIndex - 1];
+        out_vertices.push_back(vertex);
+        vertex = temp_normals[vertexIndex - 1];
+        out_normals.push_back(vertex);
+    }
+
+    return true;
+}
+
+float* calculateNormal(float x1, float y1,
+                        float z1, float x2,
+                        float y2, float z2,
+                        float x3, float y3, float z3)
+{
+    float result[3];
+    float a1 = x2 - x1;
+    float b1 = y2 - y1;
+    float c1 = z2 - z1;
+    float a2 = x3 - x1;
+    float b2 = y3 - y1;
+    float c2 = z3 - z1;
+    result[0] = b1 * c2 - b2 * c1;
+    result[1] = a2 * c1 - a1 * c2;
+    result[2] = a1 * b2 - b1 * a2;
+
+    float magnitude = sqrt(result[0] * result[0] + result[1] * result[1] + result[2] * result[2]);
+    result[0] /= magnitude;
+    result[1] /= magnitude;
+    result[2] /= magnitude;
+
+    return result;
+}
+
+float ROCKET_Z = TABLETOP_Z + 0.3;
+float ROCKET_X = TABLETOP_X1 + 3 * (TABLETOP_X2 - TABLETOP_X1) / 4;
+float ROCKET_Y = TABLETOP_Y1 + (TABLETOP_Y2 - TABLETOP_Y1) / 4;
+
+std::array<float, 3> transform(std::array<float, 3> vertex) {
+    float scaleFactor = 50;
+
+    vertex[0] = ROCKET_X + vertex[0] / scaleFactor;
+    vertex[1] = ROCKET_Y + vertex[1] / scaleFactor;
+    vertex[2] = 1.2 * ROCKET_Z - vertex[2] / scaleFactor;
+    return vertex;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // Draw Rocket
@@ -1075,7 +1176,39 @@ void DrawRocket(void )
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess1 );
 
-    glBindTexture( GL_TEXTURE_2D, spotsTexObj );
+    glBindTexture( GL_TEXTURE_2D, 0 );
 
+    std::vector< std::array<float, 3> > vertices;
+    std::vector< std::array<float, 2> > uvs;
+    std::vector< std::array<float, 3> > normals; // Won't be used at the moment.
+    bool res = loadOBJ("cube.obj", vertices, uvs, normals);
 
+    if (!res) {
+        printf("Error loading the object\n");
+        return;
+    }
+
+    for( unsigned int i=0; i < vertices.size() - 3; i += 4 ) {
+        std::array<float, 3> vertex1 = vertices[i];
+        std::array<float, 3> vertex2 = vertices[i + 1];
+        std::array<float, 3> vertex3 = vertices[i + 2];
+        std::array<float, 3> vertex4 = vertices[i + 3];
+
+        glPushMatrix();
+        glTranslatef( ROCKET_X, ROCKET_Y, ROCKET_Z );
+        glScalef(0.02, 0.02, 0.02);
+
+        float* normal = calculateNormal(vertex1[0], vertex1[1], vertex1[2],
+                                         vertex2[0], vertex2[1], vertex2[2],
+                                         vertex3[0], vertex3[1], vertex3[2]);
+
+        glNormal3f(normal[0], normal[1], normal[2]); // Normal vector.
+
+        SubdivideAndDrawQuad(1, 1,
+                             0.0, 0.0, vertex1[0], vertex1[1], vertex1[2],
+                             0.0, 1.0, vertex2[0], vertex2[1], vertex2[2],
+                             1.0, 1.0, vertex3[0],vertex3[1], vertex3[2],
+                             1.0, 0.0, vertex4[0],vertex4[1], vertex4[2]);
+        glPopMatrix();
+    }
 }
