@@ -1,7 +1,7 @@
 //============================================================
 // STUDENT NAME: Ng Chi Sern
 // NUS User ID.: A0219866M
-// COMMENTS TO GRADER: TODO
+// COMMENTS TO GRADER: TASK 2: EARTH-LIKE UFO INVADING THE EARTH AT THE COMMAND OF ANYA.
 //
 // ============================================================
 
@@ -209,8 +209,6 @@ void MakeReflectionImage( void )
     // STEP 6
     glReadBuffer(GL_BACK);
     glBindTexture(GL_TEXTURE_2D, reflectionTexObj);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
     glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, winWidth, winHeight, 0);
 }
 
@@ -695,6 +693,7 @@ void SetUpTextureMaps( void )
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
 }
 
 
