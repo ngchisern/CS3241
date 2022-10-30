@@ -83,7 +83,11 @@ const char ceilingTexFile[] = "images/ceiling.jpg";
 const char brickTexFile[] = "images/brick.jpg";
 const char checkerTexFile[] = "images/checker.png";
 const char spotsTexFile[] = "images/spots.png";
-
+const char anyaTextFile[] = "images/anya.jpeg";
+const char metalTextFile[] = "images/metal.jpeg";
+const char earthTextFile[] = "images/earth.jpeg";
+const char grassTextFile[] = "images/grass.jpeg";
+const char seaTextFile[] = "images/sea.jpeg";
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -116,6 +120,11 @@ GLuint ceilingTexObj;
 GLuint brickTexObj;
 GLuint checkerTexObj;
 GLuint spotsTexObj;
+GLuint anyaTexObj;
+GLuint metalTexObj;
+GLuint earthTexObj;
+GLuint grassTexObj;
+GLuint seaTexObj;
 
 // Others.
 bool drawAxes = true;           // Draw world coordinate frame axes iff true.
@@ -129,7 +138,7 @@ void DrawRoom( void );
 void DrawTeapot( void );
 void DrawSphere( void );
 void DrawTable( void );
-void DrawRocket(void );
+void DrawUFO(void );
 
 
 
@@ -195,7 +204,7 @@ void MakeReflectionImage( void )
     DrawRoom();
     DrawTeapot();
     DrawSphere();
-    DrawRocket();
+    DrawUFO();
 
     // STEP 6
     glReadBuffer(GL_BACK);
@@ -249,7 +258,7 @@ void MyDisplay( void )
     DrawTeapot();
     DrawSphere();
     DrawTable();
-    DrawRocket();
+    DrawUFO();
 
     glutSwapBuffers();
 }
@@ -559,6 +568,110 @@ void SetUpTextureMaps( void )
 
     DeallocateImageData( &imageData );
 
+    // This texture object is for the anya texture map.
+    glGenTextures( 1, &anyaTexObj );
+    glBindTexture(GL_TEXTURE_2D, anyaTexObj );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
+    if ( ReadImageFile(anyaTextFile, &imageData,
+                       &imageWidth, &imageHeight, &numComponents ) == 0 ) exit( 1 );
+    if ( numComponents != 3 )
+    {
+        fprintf( stderr, "Error: Texture image is not in RGB format.\n" );
+        exit( 1 );
+    }
+
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+                       GL_RGB, GL_UNSIGNED_BYTE, imageData );
+
+    DeallocateImageData( &imageData );
+
+    // This texture object is for the metal texture map.
+    glGenTextures( 1, &metalTexObj );
+    glBindTexture(GL_TEXTURE_2D, metalTexObj );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
+    if ( ReadImageFile(metalTextFile, &imageData,
+                       &imageWidth, &imageHeight, &numComponents ) == 0 ) exit( 1 );
+    if ( numComponents != 3 )
+    {
+        fprintf( stderr, "Error: Texture image is not in RGB format.\n" );
+        exit( 1 );
+    }
+
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+                       GL_RGB, GL_UNSIGNED_BYTE, imageData );
+
+    DeallocateImageData( &imageData );
+
+    // This texture object is for the Earth texture map.
+    glGenTextures( 1, &earthTexObj );
+    glBindTexture(GL_TEXTURE_2D, earthTexObj );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
+    if ( ReadImageFile(earthTextFile, &imageData,
+                       &imageWidth, &imageHeight, &numComponents ) == 0 ) exit( 1 );
+    if ( numComponents != 3 )
+    {
+        fprintf( stderr, "Error: Texture image is not in RGB format.\n" );
+        exit( 1 );
+    }
+
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+                       GL_RGB, GL_UNSIGNED_BYTE, imageData );
+
+    DeallocateImageData( &imageData );
+
+    // This texture object is for the grass texture map.
+    glGenTextures( 1, &grassTexObj );
+    glBindTexture(GL_TEXTURE_2D, grassTexObj );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
+    if ( ReadImageFile(grassTextFile, &imageData,
+                       &imageWidth, &imageHeight, &numComponents ) == 0 ) exit( 1 );
+    if ( numComponents != 3 )
+    {
+        fprintf( stderr, "Error: Texture image is not in RGB format.\n" );
+        exit( 1 );
+    }
+
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+                       GL_RGB, GL_UNSIGNED_BYTE, imageData );
+
+    DeallocateImageData( &imageData );
+
+    // This texture object is for the sea texture map.
+    glGenTextures( 1, &seaTexObj );
+    glBindTexture(GL_TEXTURE_2D, seaTexObj );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
+    if ( ReadImageFile(seaTextFile, &imageData,
+                       &imageWidth, &imageHeight, &numComponents ) == 0 ) exit( 1 );
+    if ( numComponents != 3 )
+    {
+        fprintf( stderr, "Error: Texture image is not in RGB format.\n" );
+        exit( 1 );
+    }
+
+    gluBuild2DMipmaps( GL_TEXTURE_2D, GL_RGB, imageWidth, imageHeight,
+                       GL_RGB, GL_UNSIGNED_BYTE, imageData );
+
+    DeallocateImageData( &imageData );
 
 // This texture object is for storing the reflection image read from the color buffer.
 
@@ -777,9 +890,6 @@ void SubdivideAndDrawQuad( int uSteps, int vSteps,
 
     glEnd();
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////
 // Draw the room.
@@ -1060,7 +1170,7 @@ bool loadOBJ(
 ) {
     FILE *file = fopen(path, "r");
     if (file == NULL) {
-        printf("Impossible to open the file!\n");
+        printf("Cannot open the file!\n");
         return false;
     }
 
@@ -1089,28 +1199,24 @@ bool loadOBJ(
             fscanf(file, "%f %f %f\n", &normal[0], &normal[1], &normal[2]);
             temp_normals.push_back(normal);
         } else if (strcmp(lineHeader, "f") == 0) {
-            unsigned int vertexIndex[4], uvIndex[4], normalIndex[4];
-            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d %d/%d/%d\n", &vertexIndex[0], &uvIndex[0],
-                                 &normalIndex[0],
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
+                                 &vertexIndex[0], &uvIndex[0],&normalIndex[0],
                                  &vertexIndex[1], &uvIndex[1], &normalIndex[1],
-                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2],
-                                 &vertexIndex[3], &uvIndex[3], &normalIndex[3]);
-            if (matches != 12) {
+                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+            if (matches != 9) {
                 printf("File can't be read by this simple parser\n");
                 return false;
             }
             vertexIndices.push_back(vertexIndex[0]);
             vertexIndices.push_back(vertexIndex[1]);
             vertexIndices.push_back(vertexIndex[2]);
-            vertexIndices.push_back(vertexIndex[3]);
             uvIndices.push_back(uvIndex[0]);
             uvIndices.push_back(uvIndex[1]);
             uvIndices.push_back(uvIndex[2]);
-            uvIndices.push_back(uvIndex[3]);
             normalIndices.push_back(normalIndex[0]);
             normalIndices.push_back(normalIndex[1]);
             normalIndices.push_back(normalIndex[2]);
-            uvIndices.push_back(uvIndex[4]);
         }
     }
 
@@ -1120,95 +1226,91 @@ bool loadOBJ(
         out_vertices.push_back(vertex);
         vertex = temp_normals[vertexIndex - 1];
         out_normals.push_back(vertex);
+        std::array<float, 2> uv = temp_uvs[vertexIndex - 1];
+        out_uvs.push_back(uv);
     }
 
     return true;
-}
-
-float* calculateNormal(float x1, float y1,
-                        float z1, float x2,
-                        float y2, float z2,
-                        float x3, float y3, float z3)
-{
-    float result[3];
-    float a1 = x2 - x1;
-    float b1 = y2 - y1;
-    float c1 = z2 - z1;
-    float a2 = x3 - x1;
-    float b2 = y3 - y1;
-    float c2 = z3 - z1;
-    result[0] = b1 * c2 - b2 * c1;
-    result[1] = a2 * c1 - a1 * c2;
-    result[2] = a1 * b2 - b1 * a2;
-
-    float magnitude = sqrt(result[0] * result[0] + result[1] * result[1] + result[2] * result[2]);
-    result[0] /= magnitude;
-    result[1] /= magnitude;
-    result[2] /= magnitude;
-
-    return result;
 }
 
 float ROCKET_Z = TABLETOP_Z + 0.3;
 float ROCKET_X = TABLETOP_X1 + 3 * (TABLETOP_X2 - TABLETOP_X1) / 4;
 float ROCKET_Y = TABLETOP_Y1 + (TABLETOP_Y2 - TABLETOP_Y1) / 4;
 
-std::array<float, 3> transform(std::array<float, 3> vertex) {
-    float scaleFactor = 50;
-
-    vertex[0] = ROCKET_X + vertex[0] / scaleFactor;
-    vertex[1] = ROCKET_Y + vertex[1] / scaleFactor;
-    vertex[2] = 1.2 * ROCKET_Z - vertex[2] / scaleFactor;
-    return vertex;
-}
+void drawUFOComponent(char*, GLuint);
 
 /////////////////////////////////////////////////////////////////////////////
-// Draw Rocket
+// Draw UFO
 /////////////////////////////////////////////////////////////////////////////
-void DrawRocket(void )
+void DrawUFO(void )
 {
-    GLfloat matAmbient1[] = { 0.5, 0.7, 1.0, 1.0 };
-    GLfloat matDiffuse1[] = { 0.5, 0.7, 1.0, 1.0 };
-    GLfloat matSpecular1[] = { 0.8, 0.8, 0.8, 1.0 };
-    GLfloat matShininess1[] = { 128.0 };
+    GLfloat matAmbient[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat matDiffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat matSpecular[] = { 1.0, 1.0, 1.0, 1.0 };
+    GLfloat matShininess[] = { 128.0 };
+    glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular );
+    glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess );
+
+    drawUFOComponent("objs/sphere.obj", earthTexObj);
+    drawUFOComponent("objs/rod.obj", metalTexObj);
+    drawUFOComponent("objs/flag.obj", anyaTexObj);
+    drawUFOComponent("objs/flag_back.obj", anyaTexObj);
+
+    GLfloat matAmbient1[] = { 0.6, 0.6, 0.6, 1.0 };
+    GLfloat matDiffuse1[] = { 0.6, 0.6, 0.6, 1.0 };
+    GLfloat matSpecular1[] = { 0, 0, 0, 1.0 };
+    GLfloat matShininess1[] = { 0.0 };
     glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, matAmbient1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, matDiffuse1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, matSpecular1 );
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, matShininess1 );
+    drawUFOComponent("objs/upper.obj", grassTexObj);
+    drawUFOComponent("objs/lower.obj", seaTexObj);
+}
 
-    glBindTexture( GL_TEXTURE_2D, 0 );
-
+void drawUFOComponent(char * path, GLuint textObj) {
     std::vector< std::array<float, 3> > vertices;
     std::vector< std::array<float, 2> > uvs;
-    std::vector< std::array<float, 3> > normals; // Won't be used at the moment.
-    bool res = loadOBJ("cube.obj", vertices, uvs, normals);
+    std::vector< std::array<float, 3> > normals;
+    bool res = loadOBJ(path, vertices, uvs, normals);
 
     if (!res) {
         printf("Error loading the object\n");
         return;
     }
 
-    for( unsigned int i=0; i < vertices.size() - 3; i += 4 ) {
+    glBindTexture( GL_TEXTURE_2D, textObj );
+    glPushMatrix();
+    glTranslatef( ROCKET_X, ROCKET_Y, ROCKET_Z );
+    glScalef(0.1, 0.1, 0.1);
+    glBegin(GL_TRIANGLES);
+    for( unsigned int i=0; i < vertices.size() - 2; i += 3 ) {
         std::array<float, 3> vertex1 = vertices[i];
         std::array<float, 3> vertex2 = vertices[i + 1];
         std::array<float, 3> vertex3 = vertices[i + 2];
-        std::array<float, 3> vertex4 = vertices[i + 3];
 
-        glPushMatrix();
-        glTranslatef( ROCKET_X, ROCKET_Y, ROCKET_Z );
-        glScalef(0.02, 0.02, 0.02);
+        std::array<float, 3> normal1 = normals[i];
+        std::array<float, 3> normal2 = normals[i + 1];
+        std::array<float, 3> normal3 = normals[i + 2];
 
-        float* normal = calculateNormal(vertex1[0], vertex1[1], vertex1[2],
-                                         vertex2[0], vertex2[1], vertex2[2],
-                                         vertex3[0], vertex3[1], vertex3[2]);
+        std::array<float, 2> uv1 = uvs[i];
+        std::array<float, 2> uv2 = uvs[i + 1];
+        std::array<float, 2> uv3 = uvs[i + 2];
 
-        glNormal3f(normal[0], normal[1], normal[2]); // Normal vector.
+        glNormal3f(normal1[0], normal1[1], normal1[2]);
+        glTexCoord2f(uv1[0], uv1[1]);
+        glVertex3f(vertex1[0], vertex1[1], vertex1[2]);
 
-        SubdivideAndDrawQuad(1, 1,
-                             0.0, 0.0, vertex1[0], vertex1[1], vertex1[2],
-                             0.0, 1.0, vertex2[0], vertex2[1], vertex2[2],
-                             1.0, 1.0, vertex3[0],vertex3[1], vertex3[2],
-                             1.0, 0.0, vertex4[0],vertex4[1], vertex4[2]);
-        glPopMatrix();
+        glNormal3f(normal2[0], normal2[1], normal2[2]);
+        glTexCoord2f(uv2[0], uv2[1]);
+        glVertex3f(vertex2[0], vertex2[1], vertex2[2]);
+
+        glNormal3f(normal3[0], normal3[1], normal3[2]);
+        glTexCoord2f(uv3[0], uv3[1]);
+        glVertex3f(vertex3[0], vertex3[1], vertex3[2]);
     }
+    glEnd();
+    glPopMatrix();
 }
