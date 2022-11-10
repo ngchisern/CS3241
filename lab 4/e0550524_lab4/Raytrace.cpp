@@ -105,7 +105,7 @@ Color Raytrace::TraceRay( const Ray &ray, const Scene &scene,
 
 
     //**********************************
-    result = nearestHitRec.material.k_d;  // REMOVE THIS LINE AFTER YOU HAVE FINISHED CODE BELOW.
+    // result = nearestHitRec.material.k_d;  // REMOVE THIS LINE AFTER YOU HAVE FINISHED CODE BELOW.
     //**********************************
 
 
@@ -115,6 +115,25 @@ Color Raytrace::TraceRay( const Ray &ray, const Scene &scene,
     //***********************************************
     //*********** WRITE YOUR CODE HERE **************
     //***********************************************
+    for (int i = 0; i < scene.ptLights.size(); i++) {
+        PointLightSource ptLight = scene.ptLights[i];
+        Vector3d L = (ptLight.position - nearestHitRec.p).makeUnitVector();
+        float Kshadow = 1.0;
+
+        if (hasShadow) {
+            Ray shadowRay (nearestHitRec.p, L);
+            double tmax = (ptLight.position - nearestHitRec.p).length();
+            for (int j = 0; j < scene.surfaces.size(); j++) {
+                bool shadowHit = scene.surfaces[j]->shadowHit(shadowRay, DEFAULT_TMIN, tmax);
+                if (shadowHit) {
+                    Kshadow = 0.0;
+                    break;
+                }
+            }
+        }
+        result += Kshadow * computePhongLighting(L, N, V, nearestHitRec.material, ptLight);
+    }
+
 
 
 
@@ -123,15 +142,18 @@ Color Raytrace::TraceRay( const Ray &ray, const Scene &scene,
     //***********************************************
     //*********** WRITE YOUR CODE HERE **************
     //***********************************************
-
-
+    result += scene.amLight.I_a * nearestHitRec.material.k_a;
 
 // Add to result the reflection of the scene.
 
     //***********************************************
     //*********** WRITE YOUR CODE HERE **************
     //***********************************************
-
+    if (reflectLevels > 0) {
+        Vector3d R = 2 * (dot(N, V)) * N - V;
+        Ray reflectedRay ( nearestHitRec.p, R );
+        result += nearestHitRec.material.k_rg * TraceRay(reflectedRay, scene, reflectLevels - 1, hasShadow);
+    }
 
     return result;
 }
