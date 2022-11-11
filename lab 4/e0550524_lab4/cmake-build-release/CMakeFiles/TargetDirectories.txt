@@ -1,0 +1,3 @@
+/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release/CMakeFiles/Lab4.dir
+/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release/CMakeFiles/edit_cache.dir
+/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release/CMakeFiles/rebuild_cache.dir

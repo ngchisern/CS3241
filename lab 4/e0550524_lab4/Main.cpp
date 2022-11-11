@@ -34,7 +34,7 @@ static constexpr int imageWidth2 = 640;
 static constexpr int imageHeight2 = 480;
 static constexpr int reflectLevels2 = 2;  // 0 -- object does not reflect scene.
 static constexpr int hasShadow2 = true;
-static constexpr std::string_view outImageFile2 = "img_spheres.png";
+static constexpr std::string_view outImageFile2 = "out2.png";
 
 
 
@@ -96,6 +96,7 @@ void DefineScene2( Scene &scene, int imageWidth, int imageHeight );
 
 int main()
 {
+    /*
 // Define Scene 1.
 
     Scene scene1;
@@ -113,8 +114,8 @@ int main()
     {
         delete surface;
     }
+*/
 
-/*
 // Define Scene 2.
 
     Scene scene2;
@@ -132,7 +133,7 @@ int main()
     {
         delete surface;
     }
-*/
+
 
     std::cout << "All done. Press Enter to exit." << std::endl;
     std::cin.get();
@@ -287,7 +288,77 @@ void DefineScene1( Scene &scene, int imageWidth, int imageHeight )
                            imageWidth, imageHeight );  // image_width, image_height
 }
 
+bool loadOBJ(
+        const char * path,
+        std::vector < std::array<float, 3> > & out_vertices,
+        std::vector < std::array<float, 2> > & out_uvs,
+        std::vector < std::array<float, 3> > & out_normals
+) {
+    FILE *file = fopen(path, "r");
+    if (file == NULL) {
+        printf("Cannot open the file!\n");
+        return false;
+    }
 
+    std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;
+    std::vector<std::array<float, 3> > temp_vertices;
+    std::vector<std::array<float, 2> > temp_uvs;
+    std::vector<std::array<float, 3> > temp_normals;
+
+    while (true) {
+        char lineHeader[128];
+        // read the first word of the line
+        int res = fscanf(file, "%s", lineHeader);
+        if (res == EOF)
+            break;
+
+        if (strcmp(lineHeader, "v") == 0) {
+            std::array<float, 3> vertex;
+            fscanf(file, "%f %f %f\n", &vertex[0], &vertex[1], &vertex[2]);
+            temp_vertices.push_back(vertex);
+        } else if (strcmp(lineHeader, "vt") == 0) {
+            std::array<float, 2> uv;
+            fscanf(file, "%f %f\n", &uv[0], &uv[1]);
+            temp_uvs.push_back(uv);
+        } else if (strcmp(lineHeader, "vn") == 0) {
+            std::array<float, 3> normal;
+            fscanf(file, "%f %f %f\n", &normal[0], &normal[1], &normal[2]);
+            temp_normals.push_back(normal);
+        } else if (strcmp(lineHeader, "f") == 0) {
+            unsigned int vertexIndex[3], uvIndex[3], normalIndex[3];
+            int matches = fscanf(file, "%d/%d/%d %d/%d/%d %d/%d/%d\n",
+                                 &vertexIndex[0], &uvIndex[0],&normalIndex[0],
+                                 &vertexIndex[1], &uvIndex[1], &normalIndex[1],
+                                 &vertexIndex[2], &uvIndex[2], &normalIndex[2]);
+
+            if (matches != 9) {
+                printf("File can't be read by this simple parser\n");
+                return false;
+            }
+            vertexIndices.push_back(vertexIndex[0]);
+            vertexIndices.push_back(vertexIndex[1]);
+            vertexIndices.push_back(vertexIndex[2]);
+            uvIndices.push_back(uvIndex[0]);
+            uvIndices.push_back(uvIndex[1]);
+            uvIndices.push_back(uvIndex[2]);
+            normalIndices.push_back(normalIndex[0]);
+            normalIndices.push_back(normalIndex[1]);
+            normalIndices.push_back(normalIndex[2]);
+        }
+    }
+
+    for (unsigned int i = 0; i < vertexIndices.size(); i++) {
+        unsigned int vertexIndex = vertexIndices[i];
+        std::array<float, 3> vertex = temp_vertices[vertexIndex - 1];
+        out_vertices.push_back(vertex);
+        vertex = temp_normals[vertexIndex - 1];
+        out_normals.push_back(vertex);
+        std::array<float, 2> uv = temp_uvs[vertexIndex - 1];
+        out_uvs.push_back(uv);
+    }
+
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////////////
 // Modeling of Scene 2.
@@ -295,8 +366,135 @@ void DefineScene1( Scene &scene, int imageWidth, int imageHeight )
 
 void DefineScene2( Scene &scene, int imageWidth, int imageHeight )
 {
-    //***********************************************
-    //*********** WRITE YOUR CODE HERE **************
-    //***********************************************
+    scene.backgroundColor = Color( 0.15f, 0.15f, 0.15f );
 
+    scene.amLight.I_a = Color( 1.0f, 1.0f, 1.0f ) * 0.25f;
+
+// Define materials.
+
+    // Dark red.
+    Material darkRed = Material();
+    darkRed.k_d = Color(0.8f, 0.4f, 0.4f ) * 0.5f;
+    darkRed.k_a = darkRed.k_d * 2.0f;
+    darkRed.k_r = Color( 0.8f, 0.8f, 0.8f );
+    darkRed.k_rg = Color( 0.8f, 0.8f, 0.8f );
+    darkRed.n = 64.0f;
+
+    // Light red.
+    Material lightRed = Material();
+    lightRed.k_d = Color( 1.0f, 0.4f, 0.4f );
+    lightRed.k_a = lightRed.k_d;
+    lightRed.k_r = Color( 0.8f, 0.4f, 0.4f ) / 1.5f;
+    lightRed.k_rg = Color( 0.8f, 0.4f, 0.4f ) / 3.0f;
+    lightRed.n = 128.0f;
+
+    // Dark gray.
+    Material darkGray = Material();
+    darkGray.k_d = Color(112.0/255, 128.0/255, 144.0/255 ) * 0.9f;
+    darkGray.k_a = darkGray.k_d;
+    darkGray.k_r = Color(0.8f, 0.8f, 0.8f ) / 1.5f;
+    darkGray.k_rg = Color(0.8f, 0.8f, 0.8f ) / 2.5f;
+    darkGray.n = 64.0f;
+
+    // Gray.
+    Material gray = Material();
+    gray.k_d = Color( 0.6f, 0.6f, 0.6f ) * 0.7f;
+    gray.k_a = gray.k_d;
+    gray.k_r = Color( 0.6f, 0.6f, 0.6f );
+    gray.k_rg = Color( 0.8f, 0.8f, 0.8f );
+    gray.n = 128.0f;
+
+    // Silver.
+    Material silver = Material();
+    silver.k_d = Color( 0.75f, 0.75f, 0.75f );
+    silver.k_a = silver.k_d;
+    silver.k_r = Color( 0.6f, 0.6f, 0.6f );
+    silver.k_rg = Color( 0.8f, 0.8f, 0.8f );
+    silver.n = 128.0f;
+
+    // Insert into scene materials vector.
+    scene.materials = { lightRed, darkRed, darkGray, silver, gray };
+
+
+// Define point light sources.
+
+    scene.ptLights.resize(2);
+
+    // Red Light
+    PointLightSource light0 = { Vector3d(-135.0, 75.0, 16.0), Color(1.0f, 0.0f, 0.0f) * 0.8 };
+
+    PointLightSource light1 = { Vector3d( 100.0, 100.0, 100.0 ), Color(1.0f, 1.0f, 1.0f) * 0.7 };
+
+    scene.ptLights = { light0, light1 };
+
+
+// Define surface primitives.
+
+    auto horzPlane = new Plane( 0.0, 1.0, 0.0, 0.0, scene.materials[4] ); // Horizontal plane.
+    auto vertPlane = new Plane( 0.1, 0.0, 0.1, 1000.0, scene.materials[1] ); // Vertical plane.
+    auto smallSphere = new Sphere( Vector3d( -150.0, 75.0, 1.0 ), 15.0, scene.materials[0] ); // Small sphere.
+
+    std::vector< std::array<float, 3> > vertices;
+    std::vector< std::array<float, 2> > uvs;
+    std::vector< std::array<float, 3> > normals;
+    bool res = loadOBJ("images/blade.obj", vertices, uvs, normals);
+
+    if (!res) {
+        printf("Error loading the object\n");
+        return;
+    }
+
+    std::vector< std::array<float, 3> > vertices2;
+    std::vector< std::array<float, 2> > uvs2;
+    std::vector< std::array<float, 3> > normals2;
+    bool res2 = loadOBJ("images/grip.obj", vertices2, uvs2, normals2);
+
+    if (!res2) {
+        printf("Error loading the object2\n");
+        return;
+    }
+
+    scene.surfaces.resize(3 + vertices.size() - 2 + vertices2.size() - 2);
+
+    scene.surfaces = { horzPlane, vertPlane,
+                      smallSphere};
+
+    float swordX = 20;
+    float swordZ = 20;
+
+    for( unsigned int i=0; i < vertices.size() - 2; i += 3 ) {
+        std::array<float, 3> vertex1 = vertices[i];
+        std::array<float, 3> vertex2 = vertices[i + 1];
+        std::array<float, 3> vertex3 = vertices[i + 2];
+
+        auto vertex = new Triangle(Vector3d(vertex1[0] + swordX, vertex1[1], vertex1[2] + swordZ),
+                                   Vector3d(vertex2[0] + swordX, vertex2[1], vertex2[2] + swordZ),
+                                   Vector3d(vertex3[0] + swordX, vertex3[1], vertex3[2] + swordZ),
+                                   scene.materials[3]);
+
+        scene.surfaces.push_back(vertex);
+    }
+
+    for( unsigned int i=0; i < vertices2.size() - 2; i += 3 ) {
+        std::array<float, 3> vertex1 = vertices2[i];
+        std::array<float, 3> vertex2 = vertices2[i + 1];
+        std::array<float, 3> vertex3 = vertices2[i + 2];
+
+        auto vertex = new Triangle(Vector3d(vertex1[0] + swordX, vertex1[1], vertex1[2] + swordZ),
+                                   Vector3d(vertex2[0] + swordX, vertex2[1], vertex2[2] + swordZ),
+                                   Vector3d(vertex3[0] + swordX, vertex3[1], vertex3[2] + swordZ),
+                                   scene.materials[2]);
+
+        scene.surfaces.push_back(vertex);
+    }
+
+// Define camera.
+
+    scene.camera = Camera( Vector3d( 155.0, 20.0, 180.0 ),  // eye
+                           Vector3d( 45.0, 7.5, 55.0 ),  // lookAt
+                           Vector3d( 0.0, 1.0, 0.0 ),  //upVector
+                           (-1.0 * imageWidth) / imageHeight,  // left
+                           (1.0 * imageWidth) / imageHeight,  // right
+                           -1.0, 1.0, 3.0,  // bottom, top, near
+                           imageWidth, imageHeight );  // image_width, image_height
 }

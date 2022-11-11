@@ -1,0 +1,204 @@
+## This file contains all the build statements describing the
+# compilation DAG.
+
+# =============================================================================
+# Write statements declared in CMakeLists.txt:
+# 
+# Which is the root file.
+# =============================================================================
+
+# =============================================================================
+# Project: Lab4
+# Configurations: Release
+# =============================================================================
+
+#############################################
+# Minimal version of Ninja required by this file
+
+ninja_required_version = 1.5
+
+
+#############################################
+# Set configuration variable for custom commands.
+
+CONFIGURATION = Release
+# =============================================================================
+# Include auxiliary files.
+
+
+#############################################
+# Include rules file.
+
+include CMakeFiles/rules.ninja
+
+# =============================================================================
+
+#############################################
+# Logical path to working directory; prefix for absolute paths.
+
+cmake_ninja_workdir = /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/cmake-build-release/
+# =============================================================================
+# Object build statements for EXECUTABLE target Lab4
+
+
+#############################################
+# Order-only phony target for Lab4
+
+build cmake_object_order_depends_target_Lab4: phony || CMakeFiles/Lab4.dir
+
+build CMakeFiles/Lab4.dir/Main.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Main.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Main.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Camera.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Camera.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Camera.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Image.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Image.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Image.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/ImageIO.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/ImageIO.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/ImageIO.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Raytrace.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Raytrace.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Raytrace.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Util.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Util.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Util.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Plane.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Plane.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Plane.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Sphere.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Sphere.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Sphere.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+build CMakeFiles/Lab4.dir/Triangle.cpp.o: CXX_COMPILER__Lab4_Release /Users/ngchisern/Downloads/project/CS3241/Lab$ Assignments/lab$ 4/e0550524_lab4/Triangle.cpp || cmake_object_order_depends_target_Lab4
+  DEP_FILE = CMakeFiles/Lab4.dir/Triangle.cpp.o.d
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk -std=c++17
+  INCLUDES = -I"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/include"
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  OBJECT_FILE_DIR = CMakeFiles/Lab4.dir
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_PDB = ../Lab4.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Lab4
+
+
+#############################################
+# Link the executable ../Lab4
+
+build ../Lab4: CXX_EXECUTABLE_LINKER__Lab4_Release CMakeFiles/Lab4.dir/Main.cpp.o CMakeFiles/Lab4.dir/Camera.cpp.o CMakeFiles/Lab4.dir/Image.cpp.o CMakeFiles/Lab4.dir/ImageIO.cpp.o CMakeFiles/Lab4.dir/Raytrace.cpp.o CMakeFiles/Lab4.dir/Util.cpp.o CMakeFiles/Lab4.dir/Plane.cpp.o CMakeFiles/Lab4.dir/Sphere.cpp.o CMakeFiles/Lab4.dir/Triangle.cpp.o
+  FLAGS = -O3 -DNDEBUG -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX12.3.sdk
+  OBJECT_DIR = CMakeFiles/Lab4.dir
+  POST_BUILD = :
+  PRE_LINK = :
+  TARGET_COMPILE_PDB = CMakeFiles/Lab4.dir/
+  TARGET_FILE = ../Lab4
+  TARGET_PDB = ../Lab4.pdb
+
+
+#############################################
+# Utility command for edit_cache
+
+build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
+  COMMAND = cd "/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release" && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+  DESC = No interactive CMake dialog available...
+  restat = 1
+
+build edit_cache: phony CMakeFiles/edit_cache.util
+
+
+#############################################
+# Utility command for rebuild_cache
+
+build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
+  COMMAND = cd "/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release" && /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake --regenerate-during-build -S"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4" -B"/Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release"
+  DESC = Running CMake to regenerate build system...
+  pool = console
+  restat = 1
+
+build rebuild_cache: phony CMakeFiles/rebuild_cache.util
+
+# =============================================================================
+# Target aliases.
+
+build Lab4: phony ../Lab4
+
+# =============================================================================
+# Folder targets.
+
+# =============================================================================
+
+#############################################
+# Folder: /Users/ngchisern/Downloads/project/CS3241/Lab Assignments/lab 4/e0550524_lab4/cmake-build-release
+
+build all: phony ../Lab4
+
+# =============================================================================
+# Built-in targets
+
+
+#############################################
+# Clean all the built files.
+
+build clean: CLEAN
+
+
+#############################################
+# Print all primary targets available.
+
+build help: HELP
+
+
+#############################################
+# Make the all target the default.
+
+default all
