@@ -1,7 +1,7 @@
 //============================================================
-// STUDENT NAME:
-// NUS User ID.:
-// COMMENTS TO GRADER:
+// STUDENT NAME: Ng Chi Sern
+// NUS User ID.: A0219866M
+// COMMENTS TO GRADER: Please place blade.obj and grip.obj in the same directory as Main.cpp
 //
 // ============================================================
 
@@ -437,7 +437,7 @@ void DefineScene2( Scene &scene, int imageWidth, int imageHeight )
     std::vector< std::array<float, 3> > vertices;
     std::vector< std::array<float, 2> > uvs;
     std::vector< std::array<float, 3> > normals;
-    bool res = loadOBJ("images/blade.obj", vertices, uvs, normals);
+    bool res = loadOBJ("blade.obj", vertices, uvs, normals);
 
     if (!res) {
         printf("Error loading the object\n");
@@ -447,7 +447,7 @@ void DefineScene2( Scene &scene, int imageWidth, int imageHeight )
     std::vector< std::array<float, 3> > vertices2;
     std::vector< std::array<float, 2> > uvs2;
     std::vector< std::array<float, 3> > normals2;
-    bool res2 = loadOBJ("images/grip.obj", vertices2, uvs2, normals2);
+    bool res2 = loadOBJ("grip.obj", vertices2, uvs2, normals2);
 
     if (!res2) {
         printf("Error loading the object2\n");
