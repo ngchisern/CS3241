@@ -3,7 +3,7 @@ CS3241 Computer Graphics Lab Assignments
 
 ## Lab 1
 
-<img width="615" alt="Screenshot 2022-12-09 at 9 57 38 PM" src="https://user-images.githubusercontent.com/64767959/206718493-16f53d71-ceb3-45ee-97cd-13bf5fb1a5d2.png">
+<img width="606" alt="Screenshot 2022-12-09 at 10 09 37 PM" src="https://user-images.githubusercontent.com/64767959/206720670-2bae807c-3227-48a8-8688-18faaff7ef81.png">
 
 ## Lab 2
 
