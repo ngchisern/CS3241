@@ -15,7 +15,7 @@ CS3241 Computer Graphics Lab Assignments
 
 ## Lab 4
 
+![img_r2s](https://user-images.githubusercontent.com/64767959/206720192-8a9e5ab3-7b68-4169-ad63-500385e69c1a.png)
 
 
-
-
+![img_scene2](https://user-images.githubusercontent.com/64767959/206720207-db2041cc-a420-478f-b9dd-0f6ba1ede859.png)
